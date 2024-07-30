@@ -46,7 +46,7 @@ public class CafeController : Controller
             };
             _context.Cafes.Add(cafe);
             _context.SaveChanges();
-            return Json(new { success = true, message = "Cafe created successfully!" });
+            return Json(new { success = true, message = "Chi nhánh đã được tạo thành công!" });
         }
         return PartialView("_CreatePartial", model);
     }
@@ -89,7 +89,7 @@ public class CafeController : Controller
             _context.Cafes.Update(cafe);
             _context.SaveChanges();
 
-            return Json(new { success = true, message = "Cafe updated successfully!" });
+            return Json(new { success = true, message = "Thông tin chi nhánh đã được cập nhật!" });
         }
 
         return PartialView("_EditPartial", model);
@@ -121,13 +121,13 @@ public class CafeController : Controller
         var cafe = _context.Cafes.Find(model.Id);
         if (cafe == null)
         {
-            return Json(new { success = false, message = "Cafe not found." });
+            return Json(new { success = false, message = "Không tìm thấy chi nhánh" });
         }
 
         _context.Cafes.Remove(cafe);
         _context.SaveChanges();
 
-        return Json(new { success = true, message = "Cafe deleted successfully!" });
+        return Json(new { success = true, message = "Chi nhánh đã được xóa thành công!" });
     }
 
 }

@@ -40,13 +40,12 @@ namespace G11_Coffee.Controllers
                 {
                     foreach (var error in modelState.Errors)
                     {
-                        // Log hoặc debug error.ErrorMessage
                         Console.WriteLine(error.ErrorMessage);
                     }
                 }
             }
 
-            ModelState.Remove("Cafe"); // Remove any errors for the Cafe property
+            ModelState.Remove("Cafe"); 
 
             if (ModelState.IsValid)
             {
