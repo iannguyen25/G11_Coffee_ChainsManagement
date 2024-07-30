@@ -1,0 +1,31 @@
+﻿@model G11_Coffee.Models.RevenueViewModel
+
+<div id="report">
+    <h2>Revenue Report</h2>
+    <p><strong>Date Range:</strong> @Model.StartDate?.ToShortDateString() - @Model.EndDate?.ToShortDateString()</p>
+    <p><strong>Total Revenue:</strong> @Model.TotalRevenue.ToString("C")</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Employee</th>
+                <th>Cafe</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderDate.ToShortDateString()</td>
+                    <td>@order.Employee.FullName</td>
+                    <td>@order.Cafe.Name</td>
+                    <td>@order.TotalAmount.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

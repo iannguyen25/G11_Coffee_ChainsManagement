@@ -1,0 +1,28 @@
+﻿@model IEnumerable<G11_Coffee.Models.Order>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order Date</th>
+            <th>Employee</th>
+            <th>Cafe</th>
+            <th>Total Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                <td>@order.Employee.FullName</td>
+                <td>@order.Cafe.Name</td>
+                <td>@order.TotalAmount.ToString("C")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-info">Details</a>
+                    <a asp-action="Print" asp-route-id="@order.Id" class="btn btn-secondary" target="_blank">Print</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

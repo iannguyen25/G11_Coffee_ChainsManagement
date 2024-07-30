@@ -1,0 +1,29 @@
+﻿@model IEnumerable<G11_Coffee.Models.Order>
+
+<h2>Order Management</h2>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <input type="text" id="searchBox" class="form-control" placeholder="Search orders..." />
+    </div>
+    <div class="col-md-6">
+        <a asp-action="Create" class="btn btn-primary">Add New Order</a>
+    </div>
+</div>
+
+<div id="orderTableContainer">
+    @await Html.PartialAsync("_OrderListPartial", Model)
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#searchBox').on('keyup', function () {
+                var query = $(this).val();
+                $.get('@Url.Action("Search", "Order")', { query: query }, function (data) {
+                    $('#orderTableContainer').html(data);
+                });
+            });
+        });
+    </script>
+}

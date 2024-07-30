@@ -1,0 +1,77 @@
+﻿@model G11_Coffee.Models.RevenueViewModel
+
+@{
+    ViewData["Title"] = "Revenue Management";
+    var startDate = ViewData["StartDate"] as DateTime?;
+    var endDate = ViewData["EndDate"] as DateTime?;
+}
+
+<h2>Revenue Management</h2>
+
+<form method="get" action="@Url.Action("Index", "Revenue")">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label for="startDate">Start Date</label>
+            <input type="date" id="startDate" name="startDate" class="form-control" value="@startDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <label for="endDate">End Date</label>
+            <input type="date" id="endDate" name="endDate" class="form-control" value="@endDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary mt-4">Filter</button>
+        </div>
+    </div>
+</form>
+
+<h3>Total Revenue: @Model.TotalRevenue.ToString("C")</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Employee</th>
+            <th>Cafe</th>
+            <th>Total Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.OrderDate.ToShortDateString()</td>
+                <td>@order.Employee.FullName</td>
+                <td>@order.Cafe.Name</td>
+                <td>@order.TotalAmount.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="text-center mt-4">
+    <button id="printReportBtn" class="btn btn-success">Print Report</button>
+</div>
+
+<div id="reportContainer" style="display:none;">
+    @await Html.PartialAsync("_ReportPartial", Model)
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#printReportBtn').click(function () {
+                var reportContent = $('#reportContainer').html();
+                var printWindow = window.open('', '', 'height=600,width=800');
+                printWindow.document.write('<html><head><title>Print Report</title>');
+                printWindow.document.write('</head><body >');
+                printWindow.document.write(reportContent);
+                printWindow.document.write('</body></html>');
+                printWindow.document.close();
+                printWindow.focus();
+                printWindow.print();
+            });
+        });
+    </script>
+}

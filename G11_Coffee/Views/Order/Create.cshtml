@@ -1,0 +1,61 @@
+﻿@model G11_Coffee.Models.Order
+
+<h2>Create New Order</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="OrderDate" class="control-label"></label>
+        <input asp-for="OrderDate" class="form-control" />
+        <span asp-validation-for="OrderDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployeeId" class="control-label">Employee</label>
+        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.Employees"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="CafeId" class="control-label">Cafe</label>
+        <select asp-for="CafeId" class="form-control" asp-items="ViewBag.Cafes"></select>
+    </div>
+
+    <h4>Order Details</h4>
+    <div id="orderDetails">
+        <div class="order-detail">
+            <div class="form-group">
+                <label>Product</label>
+                <select name="OrderDetails[0].ProductId" class="form-control" asp-items="ViewBag.Products"></select>
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" name="OrderDetails[0].Quantity" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Unit Price</label>
+                <input type="number" name="OrderDetails[0].UnitPrice" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <button type="button" id="addOrderDetail" class="btn btn-secondary">Add Product</button>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var detailIndex = 1;
+            $('#addOrderDetail').click(function () {
+                var newDetail = $('.order-detail').first().clone();
+                newDetail.find('select, input').each(function () {
+                    var name = $(this).attr('name');
+                    name = name.replace('0', detailIndex);
+                    $(this).attr('name', name);
+                });
+                newDetail.appendTo('#orderDetails');
+                detailIndex++;
+            });
+        });
+    </script>
+}
