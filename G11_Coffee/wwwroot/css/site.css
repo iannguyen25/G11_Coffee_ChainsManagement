@@ -40,3 +40,8 @@ h2{
     margin-bottom: 50px;
     margin-top: 50px;
 }
+
+#report p, h4{
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
