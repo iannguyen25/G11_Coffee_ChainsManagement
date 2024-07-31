@@ -5,34 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - G11_Coffee</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="~/css/navbar.css" />
 </head>
 <body>
-    <div class="container">
+    <div class="container-fluid px-0">
         <header>
-            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-dark">
                 <a class="navbar-brand" href="/">G11 Coffee</a>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav mr-auto">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="/Cafe">Cafes</a>
+                            <a class="nav-link" href="/Cafe"><i class="fas fa-store"></i> Chi nhánh</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Employee">Employees</a>
+                            <a class="nav-link" href="/Employee"><i class="fas fa-users"></i> Nhân viên</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Product">Products</a>
+                            <a class="nav-link" href="/Product"><i class="fas fa-mug-hot"></i> Sản phẩm</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Order">Orders</a>
+                            <a class="nav-link" href="/Order"><i class="fas fa-clipboard-list"></i> Đơn hàng</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Revenue">Revenues</a>
+                            <a class="nav-link" href="/Revenue"><i class="fas fa-chart-line"></i> Doanh thu</a>
                         </li>
                     </ul>
                 </div>
+                <button class="btn btn-logout my-2 my-lg-0" type="button">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </button>
             </nav>
         </header>
         <main role="main" class="pb-3">
@@ -44,6 +50,8 @@
             </div>
         </footer>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

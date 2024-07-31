@@ -1,0 +1,30 @@
+﻿.navbar {
+    background-color: #3c3c3c !important;
+}
+
+.navbar-brand, .nav-link {
+    color: #fff !important;
+}
+
+    .nav-link:hover {
+        color: #ffc107 !important;
+    }
+
+.btn-logout {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+}
+
+    .btn-logout:hover {
+        background-color: #c82333;
+        color: #fff;
+    }
+
+@media (max-width: 768px) {
+    .navbar-nav {
+        background-color: #4a4a4a;
+        padding: 10px;
+        border-radius: 5px;
+    }
+}
