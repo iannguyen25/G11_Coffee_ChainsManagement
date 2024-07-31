@@ -1,4 +1,4 @@
-/* wwwroot/css/site.css */
+﻿/* wwwroot/css/site.css */
 
 .modal-content {
     border-radius: 10px;
@@ -24,4 +24,19 @@
 /* Custom styles */
 .modal-dialog {
     max-width: 800px;
+}
+
+body {
+    background-color: #f5f5dc; /* Thay đổi mã màu nền tại đây */
+    color: #333; /* Màu chữ */
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    text-align: center;
+}
+
+h2{
+    margin-bottom: 50px;
+    margin-top: 50px;
 }
