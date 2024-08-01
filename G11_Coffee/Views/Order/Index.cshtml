@@ -7,7 +7,7 @@
         <input type="text" id="searchBox" class="form-control" placeholder="Search orders..." />
     </div>
     <div class="col-md-2">
-        <a asp-action="Create" class="btn btn-primary">Add New Order</a>
+        <button id="addEmployeeBtn" class="btn btn-primary">Add New Order</button>
     </div>
 </div>
 
@@ -15,10 +15,35 @@
     @await Html.PartialAsync("_OrderListPartial", Model)
 </div>
 
+@* <!-- Modal cho biểu mẫu in hóa đơn -->
+<div id="invoicePrintModal" class="modal" style="display:none; max-width:70%; height=600; width=800; margin:0 auto;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="invoicePrintContent">
+                <!-- Nội dung hóa đơn sẽ được load vào đây -->
+            </div>
+        </div>
+    </div> *@
+
+<div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="employeeModalBody">
+                <!-- Partial view will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
         $(document).ready(function () {
 
+            var modal = new bootstrap.Modal(document.getElementById('employeeModal'));
+            
             function updateOrderTable() {
                 $.get('@Url.Action("Search", "Order")', { query: $('#searchBox').val() }, function (data) {
                     $('#orderTableContainer').html(data);
@@ -32,6 +57,62 @@
 
             $('#searchBox').on('keyup', function () {
                 updateOrderTable();
+            });
+
+            $(document).on('click', '.print-btn', function () {
+                var orderId = $(this).data('id');
+                loadEmployeeForm('@Url.Action("Print", "Order")', { id: orderId });
+            });
+
+            $(document).on('click', '.details-btn', function () {
+                var orderId = $(this).data('id');
+                loadEmployeeForm('@Url.Action("Details", "Order")', { id: orderId });
+            });
+
+            $('#addEmployeeBtn').click(function () {
+                loadEmployeeForm('@Url.Action("Create", "Order")');
+            });
+
+            // Form Submission
+            $(document).on('submit', '#employeeForm', function (e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $('#employeeModal').modal('hide');
+                            updateOrderTable();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error: ', status, error);
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
+
+            function loadEmployeeForm(url, data) {
+                console.log('loadEmployeeForm called with URL:', url);
+                $.get(url, data, function (response) {
+                    console.log('Response received:', response);
+                    $('#employeeModalBody').html(response.html);
+                    console.log('Modal body updated');
+                    var myModal = new bootstrap.Modal(document.getElementById('employeeModal'));
+                    console.log('Modal instance created');
+                    myModal.show();
+                    console.log('Modal show method called');
+                }).fail(function (xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                });
+            }
+
+            $('#huy').click(function () {
+                $('#employeeModal').modal('hide');
             });
         });
     </script>

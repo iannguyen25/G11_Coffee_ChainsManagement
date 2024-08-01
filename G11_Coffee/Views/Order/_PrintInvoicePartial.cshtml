@@ -1,20 +1,11 @@
 ﻿@model G11_Coffee.Models.Order
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Invoice - Order #@Model.Id</title>
-    <style>
-        /* Add your print-friendly styles here */
-    </style>
-</head>
-<body>
+<div id="report">
     <h1>Invoice</h1>
     <p>Order #: @Model.Id</p>
     <p>Date: @Model.OrderDate.ToString("yyyy-MM-dd")</p>
     <p>Employee: @Model.Employee.FullName</p>
     <p>Cafe: @Model.Cafe.Name</p>
-
     <table>
         <thead>
             <tr>
@@ -36,13 +27,6 @@
             }
         </tbody>
     </table>
-
     <p>Total Amount: @Model.TotalAmount.ToString("C")</p>
-
-    <script>
-        window.onload = function () {
-            window.print();
-        }
-    </script>
-</body>
-</html>
+    <button onclick="window.print();" class="btn btn-primary">Print Invoice</button>
+</div>

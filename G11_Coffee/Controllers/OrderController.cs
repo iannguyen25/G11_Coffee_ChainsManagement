@@ -2,14 +2,18 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 public class OrderController : Controller
 {
     private readonly ApplicationDbContext _context;
+    ICompositeViewEngine _viewEngine;
 
-    public OrderController(ApplicationDbContext context)
+    public OrderController(ApplicationDbContext context, ICompositeViewEngine viewEngine)
     {
         _context = context;
+        _viewEngine = viewEngine;
     }
 
     public async Task<IActionResult> Index()
@@ -23,28 +27,39 @@ public class OrderController : Controller
 
     public IActionResult Create()
     {
-        ViewBag.Employees = new SelectList(_context.Employees, "Id", "FullName");
         ViewBag.Cafes = new SelectList(_context.Cafes, "Id", "Name");
+        ViewBag.Employees = new SelectList(_context.Employees, "Id", "FullName");
         ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
-        return View(new Order { OrderDate = DateTime.Now });
+        return PartialView("_CreateOrderPartial", new OrderViewModel { OrderDate = DateTime.Now });
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Order order, List<OrderDetail> orderDetails)
+    public async Task<IActionResult> Create(OrderViewModel model)
     {
         if (ModelState.IsValid)
         {
-            order.OrderDetails = orderDetails;
-            order.TotalAmount = orderDetails.Sum(od => od.Quantity * od.Price);
+            var order = new Order
+            {
+                CafeId = model.CafeId,
+                EmployeeId = model.EmployeeId,
+                OrderDate = model.OrderDate,
+                TotalAmount = model.TotalAmount,
+                OrderDetails = model.OrderDetails.Select(od => new OrderDetail
+                {
+                    ProductId = od.ProductId,
+                    Quantity = od.Quantity,
+                    Price = od.Price
+                }).ToList()
+            };
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Json(new { success = true, message = "Order created successfully" });
         }
-        ViewBag.Employees = new SelectList(_context.Employees, "Id", "FullName");
-        ViewBag.Cafes = new SelectList(_context.Cafes, "Id", "Name");
-        ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
-        return View(order);
+
+        return Json(new { success = false, message = "Invalid model state" });
     }
 
     public async Task<IActionResult> Details(int id)
@@ -58,10 +73,11 @@ public class OrderController : Controller
 
         if (order == null)
         {
-            return NotFound();
+            return Json(new { success = false, message = "Order not found" });
         }
 
-        return View(order);
+        var orderDetailsView = await this.RenderViewToStringAsync("_OrderDetailsPartial", order);
+        return Json(new { success = true, html = orderDetailsView });
     }
 
     public async Task<IActionResult> Print(int id)
@@ -75,10 +91,11 @@ public class OrderController : Controller
 
         if (order == null)
         {
-            return NotFound();
+            return Json(new { success = false, message = "Order not found" });
         }
 
-        return View(order);
+        var printInvoiceView = await this.RenderViewToStringAsync("_PrintInvoicePartial", order);
+        return Json(new { success = true, html = printInvoiceView });
     }
 
     public async Task<IActionResult> Search(string query)
@@ -92,5 +109,35 @@ public class OrderController : Controller
             .ToListAsync();
 
         return PartialView("_OrderListPartial", orders);
+    }
+
+    private async Task<string> RenderViewToStringAsync(string viewName, object model)
+    {
+        if (string.IsNullOrEmpty(viewName))
+            viewName = ControllerContext.ActionDescriptor.ActionName;
+        ViewData.Model = model;
+
+        using (var writer = new StringWriter())
+        {
+            var viewResult = _viewEngine.FindView(ControllerContext, viewName, false);
+
+            if (viewResult.View == null)
+            {
+                throw new ArgumentNullException($"{viewName} does not match any available view");
+            }
+
+            var viewContext = new ViewContext(
+                ControllerContext,
+                viewResult.View,
+                ViewData,
+                TempData,
+                writer,
+                new HtmlHelperOptions()
+            );
+
+            await viewResult.View.RenderAsync(viewContext);
+
+            return writer.GetStringBuilder().ToString();
+        }
     }
 }

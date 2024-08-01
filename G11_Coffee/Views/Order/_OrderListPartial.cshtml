@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<G11_Coffee.Models.Order>
-
 <table class="table">
     <thead>
         <tr>
@@ -19,8 +18,8 @@
                 <td>@order.Cafe.Name</td>
                 <td>@order.TotalAmount.ToString("C")</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-info">Details</a>
-                    <a asp-action="Print" asp-route-id="@order.Id" class="btn btn-secondary" target="_blank">Print</a>
+                    <button class="btn btn-info details-btn" data-id="@order.Id">Details</button>
+                    <button class="btn btn-secondary print-btn" data-id="@order.Id">Print</button>
                 </td>
             </tr>
         }
