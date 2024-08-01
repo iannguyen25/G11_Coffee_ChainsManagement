@@ -77,6 +77,20 @@ h2, h3, h4{
         background-color: #fff;
     }
 
+.card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+    border-bottom: 1px solid #ddd;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
 @media (max-width: 768px) {
     .navbar-nav {
         background-color: #4a4a4a;

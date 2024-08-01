@@ -14,20 +14,9 @@
     </div>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="productTableBody">
-        @await Html.PartialAsync("_ProductListPartial", Model)
-    </tbody>
-</table>
+<div class="row" id="productContainer">
+    @await Html.PartialAsync("_ProductGridPartial", Model)
+</div>
 
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -88,7 +77,7 @@
                     success: function (response) {
                         if (response.success) {
                             $('#productModal').modal('hide');
-                            updateProductTable();
+                            updateProductGrid();
                         } else {
                             alert('An error occurred. Please try again.');
                         }
@@ -104,14 +93,18 @@
             $(document).on('submit', '#productForm', function (e) {
                 e.preventDefault();
                 var form = $(this);
+                var formData = new FormData(form[0]);
+
                 $.ajax({
                     type: form.attr('method'),
                     url: form.attr('action'),
-                    data: form.serialize(),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (response) {
                         if (response.success) {
                             $('#productModal').modal('hide');
-                            updateProductTable();
+                            updateProductGrid();
                         } else {
                             alert(response.message);
                         }
@@ -123,16 +116,16 @@
                 });
             });
 
-            // Update Product Table
-            function updateProductTable() {
+            // Update Product Grid
+            function updateProductGrid() {
                 $.get('@Url.Action("Search", "Product")', { query: $('#searchBox').val() }, function (data) {
-                    $('#productTableBody').html(data);
+                    $('#productContainer').html(data);
                 });
             }
 
             // Search Box Keyup Event
             $('#searchBox').on('keyup', function () {
-                updateProductTable();
+                updateProductGrid();
             });
         });
     </script>

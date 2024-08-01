@@ -41,7 +41,9 @@ CREATE TABLE Products (
     CategoryId INT FOREIGN KEY REFERENCES Categories(Id),
     Name NVARCHAR(100) NOT NULL,
     Description NVARCHAR(500),
-    Price DECIMAL(18, 2) NOT NULL
+    Price DECIMAL(18, 2) NOT NULL,
+    Image VARCHAR(200)
+
 );
 
 -- Tạo bảng Orders để quản lý đơn hàng
@@ -91,12 +93,17 @@ VALUES
 ('Tea'),
 ('Pastry');
 
-INSERT INTO Products (CategoryId, Name, Description, Price)
+INSERT INTO Products (Name, Description, Price, Image, CategoryId)
 VALUES 
-(1, 'Espresso', 'Strong coffee', 2.50),
-(1, 'Latte', 'Milk coffee', 3.00),
-(2, 'Green Tea', 'Refreshing green tea', 2.00),
-(3, 'Croissant', 'Buttery croissant', 1.50);
+('Black Coffee', 'Rich and strong black coffee', 5.00, '/images/Black_Coffee.jfif', 1),
+('Brown Coffee', 'Smooth and creamy brown coffee', 5.50, '/images/Brown_Coffee.jfif', 1),
+('Matcha', 'Refreshing green matcha tea', 6.00, '/images/Matcha.jfif', 2),
+('Milk Coffee', 'Delicious coffee with milk', 5.25, '/images/Milk_Coffee.jfif', 1),
+('Pastry 1', 'Tasty pastry 1', 3.00, '/images/Pastry_1.jfif', 3),
+('Pastry 2', 'Delicious pastry 2', 3.50, '/images/Pastry_2.jfif', 3),
+('Pastry 3', 'Yummy pastry 3', 4.00, '/images/Pastry_3.jfif', 3),
+('Tea', 'Classic black tea', 4.00, '/images/Tea.jfif', 2);
+
 
 INSERT INTO Orders (CafeId, EmployeeId, OrderDate, TotalAmount)
 VALUES 

@@ -17,7 +17,9 @@ public class CafeController : Controller
     // GET: Cafe
     public async Task<IActionResult> Index()
     {
-        var cafes = await _context.Cafes
+        if (User.Identity.IsAuthenticated)
+        {
+            var cafes = await _context.Cafes
             .Select(c => new CafeViewModel
             {
                 Id = c.Id,
@@ -27,7 +29,12 @@ public class CafeController : Controller
                 Image = c.Image
             }).ToListAsync();
 
-        return View(cafes);
+            return View(cafes);
+        }
+        else
+        {
+            return RedirectToAction("Login", "Authentication");
+        }
     }
 
     // GET: Cafe/CreatePartial
@@ -161,8 +168,6 @@ public class CafeController : Controller
             return null;
         }
 
-        //var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-        //var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images", fileName);
         var fileName = imageFile.FileName;
         var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images", fileName);
 

@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace G11_Coffee.Models
 {
@@ -11,6 +13,11 @@ namespace G11_Coffee.Models
         [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive value.")]
         public decimal Price { get; set; }
+        public string Image { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Upload Image")]
+        public IFormFile ImageFile { get; set; }
 
         // Foreign key to Category
         public int CategoryId { get; set; }
