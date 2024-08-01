@@ -66,14 +66,15 @@ h2, h3, h4{
     }
 
 .btn-logout {
-    background-color: #dc3545;
     color: #fff;
-    border: none;
+    background-color: transparent;
+    border: 1px solid #fff;
+    transition: all 0.3s ease;
 }
 
     .btn-logout:hover {
-        background-color: #c82333;
-        color: #fff;
+        color: #000;
+        background-color: #fff;
     }
 
 @media (max-width: 768px) {

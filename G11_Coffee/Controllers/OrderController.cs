@@ -18,11 +18,18 @@ public class OrderController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var orders = await _context.Orders
+        if (User.Identity.IsAuthenticated)
+        {
+            var orders = await _context.Orders
             .Include(o => o.Employee)
             .Include(o => o.Cafe)
             .ToListAsync();
-        return View(orders);
+            return View(orders);
+        }
+        else
+        {
+            return RedirectToAction("Login", "Authentication");
+        }
     }
 
     public IActionResult Create()

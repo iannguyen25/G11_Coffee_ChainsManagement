@@ -1,9 +1,11 @@
 using G11_Coffee.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace G11_Coffee.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,7 +17,14 @@ namespace G11_Coffee.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if (User.Identity.IsAuthenticated) 
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
         }
 
         public IActionResult Privacy()

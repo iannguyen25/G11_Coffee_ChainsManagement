@@ -6,12 +6,8 @@ GO
 
 -- Tạo bảng Users để quản lý tài khoản người dùng
 CREATE TABLE Users (
-    Id INT PRIMARY KEY IDENTITY,
-    Username NVARCHAR(50) NOT NULL,
-    PasswordHash NVARCHAR(256) NOT NULL,
-    Email NVARCHAR(100) NOT NULL,
-    FullName NVARCHAR(100),
-    Role NVARCHAR(50) -- Ví dụ: Admin, Manager, Staff
+    Email NVARCHAR(100) PRIMARY KEY, -- Email lấy từ bảng Employees
+    Password NVARCHAR(256) NOT NULL
 );
 
 -- Tạo bảng Cafes để quản lý các quán cafe
@@ -65,11 +61,11 @@ CREATE TABLE OrderDetails (
     Price DECIMAL(18, 2) NOT NULL
 );
 
-INSERT INTO Users (Username, PasswordHash, Email, FullName, Role)
+INSERT INTO Users (Email, Password)
 VALUES 
-('admin', 'hashed_password1', 'admin@example.com', 'Admin User', 'Admin'),
-('manager', 'hashed_password2', 'manager@example.com', 'Manager User', 'Manager'),
-('staff', 'hashed_password3', 'staff@example.com', 'Staff User', 'Staff');
+('john.doe@example.com', 'password123'),  -- Mật khẩu cho John Doe
+('jane.smith@example.com', 'password123'), -- Mật khẩu cho Jane Smith
+('alice.brown@example.com', 'password123');
 
 INSERT INTO Cafes (Name, Address, Phone)
 VALUES 

@@ -13,45 +13,52 @@ public class RevenueController : Controller
 
     public async Task<IActionResult> Index(DateTime? startDate, DateTime? endDate, int? cafeId, int? employeeId)
     {
-        var ordersQuery = _context.Orders
+        if (User.Identity.IsAuthenticated)
+        {
+            var ordersQuery = _context.Orders
             .Include(o => o.Employee)
             .Include(o => o.Cafe)
             .Include(o => o.OrderDetails)
             .ThenInclude(od => od.Product)
             .AsQueryable();
 
-        if (startDate.HasValue && endDate.HasValue)
-        {
-            ordersQuery = ordersQuery.Where(o => o.OrderDate >= startDate.Value && o.OrderDate <= endDate.Value);
-        }
-        if (cafeId.HasValue)
-        {
-            ordersQuery = ordersQuery.Where(o => o.CafeId == cafeId.Value);
-        }
-        if (employeeId.HasValue)
-        {
-            ordersQuery = ordersQuery.Where(o => o.EmployeeId == employeeId.Value);
-        }
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderDate >= startDate.Value && o.OrderDate <= endDate.Value);
+            }
+            if (cafeId.HasValue)
+            {
+                ordersQuery = ordersQuery.Where(o => o.CafeId == cafeId.Value);
+            }
+            if (employeeId.HasValue)
+            {
+                ordersQuery = ordersQuery.Where(o => o.EmployeeId == employeeId.Value);
+            }
 
-        var orders = await ordersQuery.ToListAsync();
+            var orders = await ordersQuery.ToListAsync();
 
-        var revenueViewModel = new RevenueViewModel
+            var revenueViewModel = new RevenueViewModel
+            {
+                TotalRevenue = orders.Sum(o => o.TotalAmount),
+                Orders = orders ?? new List<Order>(),
+                StartDate = startDate,
+                EndDate = endDate,
+                CafeId = cafeId,
+                EmployeeId = employeeId,
+                Cafes = await _context.Cafes.ToListAsync() ?? new List<Cafe>(),
+                Employees = await _context.Employees.ToListAsync() ?? new List<Employee>(),
+                MonthlyRevenue = GetMonthlyRevenue(orders) ?? new Dictionary<string, decimal>(),
+                YearlyRevenue = GetYearlyRevenue(orders) ?? new Dictionary<string, decimal>(),
+                CafeRevenue = GetCafeRevenue(orders) ?? new Dictionary<string, decimal>(),
+                BestSellingProduct = GetBestSellingProduct(orders)
+            };
+
+            return View(revenueViewModel);
+        }
+        else
         {
-            TotalRevenue = orders.Sum(o => o.TotalAmount),
-            Orders = orders ?? new List<Order>(),
-            StartDate = startDate,
-            EndDate = endDate,
-            CafeId = cafeId,
-            EmployeeId = employeeId,
-            Cafes = await _context.Cafes.ToListAsync() ?? new List<Cafe>(),
-            Employees = await _context.Employees.ToListAsync() ?? new List<Employee>(),
-            MonthlyRevenue = GetMonthlyRevenue(orders) ?? new Dictionary<string, decimal>(),
-            YearlyRevenue = GetYearlyRevenue(orders) ?? new Dictionary<string, decimal>(),
-            CafeRevenue = GetCafeRevenue(orders) ?? new Dictionary<string, decimal>(),
-            BestSellingProduct = GetBestSellingProduct(orders)
-        };
-
-        return View(revenueViewModel);
+            return RedirectToAction("Login", "Authentication");
+        }
     }
 
     private Dictionary<string, decimal> GetMonthlyRevenue(List<Order> orders)

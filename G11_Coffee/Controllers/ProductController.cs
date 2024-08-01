@@ -14,8 +14,15 @@ public class ProductController : Controller
 
     public IActionResult Index()
     {
-        var products = _context.Products.Include(p => p.Category).ToList();
-        return View(products);
+        if (User.Identity.IsAuthenticated)
+        {
+            var products = _context.Products.Include(p => p.Category).ToList();
+            return View(products);
+        }
+        else
+        {
+            return RedirectToAction("Login", "Authentication");
+        }
     }
 
     public IActionResult Create()

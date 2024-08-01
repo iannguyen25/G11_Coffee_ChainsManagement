@@ -15,16 +15,23 @@ public class CafeController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        var cafes = _context.Cafes.ToList();
-        var cafeViewModels = cafes.Select(c => new CafeViewModel
+        if (User.Identity.IsAuthenticated)
         {
-            Id = c.Id,
-            Name = c.Name,
-            Address = c.Address,
-            Phone = c.Phone
-        }).ToList();
+            var cafes = _context.Cafes.ToList();
+            var cafeViewModels = cafes.Select(c => new CafeViewModel
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Address = c.Address,
+                Phone = c.Phone
+            }).ToList();
 
-        return View(cafeViewModels);
+            return View(cafeViewModels);
+        }
+        else
+        {
+            return RedirectToAction("Login", "Authentication");
+        }
     }
 
     [HttpGet]

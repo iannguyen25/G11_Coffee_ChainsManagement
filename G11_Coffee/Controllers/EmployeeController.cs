@@ -19,8 +19,15 @@ namespace G11_Coffee.Controllers
         // Display list of employees
         public async Task<IActionResult> Index()
         {
-            var employees = await _context.Employees.Include(e => e.Cafe).ToListAsync();
-            return View(employees);
+            if (User.Identity.IsAuthenticated)
+            {
+                var employees = await _context.Employees.Include(e => e.Cafe).ToListAsync();
+                return View(employees);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
         }
 
         // Render the create form

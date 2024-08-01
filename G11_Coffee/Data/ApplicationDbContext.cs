@@ -14,6 +14,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderDetail> OrderDetails { get; set; }
+    public DbSet<User> Users { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,5 +30,8 @@ public class ApplicationDbContext : DbContext
             .HasOne(od => od.Product)
             .WithMany()
             .HasForeignKey(od => od.ProductId);
+
+        modelBuilder.Entity<User>()
+        .HasKey(u => u.Email);
     }
 }
