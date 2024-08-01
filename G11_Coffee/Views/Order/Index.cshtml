@@ -3,10 +3,10 @@
 <h2>Order Management</h2>
 
 <div class="row mb-3">
-    <div class="col-md-6">
+    <div class="col-md-10">
         <input type="text" id="searchBox" class="form-control" placeholder="Search orders..." />
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
         <a asp-action="Create" class="btn btn-primary">Add New Order</a>
     </div>
 </div>
@@ -18,11 +18,20 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('#searchBox').on('keyup', function () {
-                var query = $(this).val();
-                $.get('@Url.Action("Search", "Order")', { query: query }, function (data) {
+
+            function updateOrderTable() {
+                $.get('@Url.Action("Search", "Order")', { query: $('#searchBox').val() }, function (data) {
                     $('#orderTableContainer').html(data);
                 });
+                $.get('@Url.Action("Index", "Order")', function (data) {
+                    var parsed = $.parseHTML(data);
+                    var newTableBody = $(parsed).find('#orderTableContainer').html();
+                    $('#orderTableContainer').html(newTableBody);
+                });
+            }
+
+            $('#searchBox').on('keyup', function () {
+                updateOrderTable();
             });
         });
     </script>
