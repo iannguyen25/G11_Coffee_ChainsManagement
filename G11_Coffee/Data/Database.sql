@@ -15,7 +15,8 @@ CREATE TABLE Cafes (
     Id INT PRIMARY KEY IDENTITY,
     Name NVARCHAR(100) NOT NULL,
     Address NVARCHAR(200),
-    Phone NVARCHAR(15)
+    Phone NVARCHAR(15),
+    Image VARCHAR(200)
 );
 
 -- Tạo bảng Employees để quản lý nhân viên
@@ -67,10 +68,16 @@ VALUES
 ('jane.smith@example.com', 'password123'), -- Mật khẩu cho Jane Smith
 ('alice.brown@example.com', 'password123');
 
-INSERT INTO Cafes (Name, Address, Phone)
+INSERT INTO Cafes (Name, Address, Phone, Image)
 VALUES 
-('Cafe A', '123 Coffee St', '123-456-7890'),
-('Cafe B', '456 Tea Ave', '987-654-3210');
+('Cafe A', '123 Main Street', '123-456-7890', '/images/Cafe_1.jfif'),
+('Cafe B', '456 Elm Street', '123-456-7891', '/images/Cafe_2.jfif'),
+('Cafe C', '789 Oak Street', '123-456-7892', '/images/Cafe_3.jfif'),
+('Cafe D', '101 Pine Street', '123-456-7893', '/images/Cafe_4.jfif'),
+('Cafe E', '202 Maple Street', '123-456-7894', '/images/Cafe_5.jfif'),
+('Cafe F', '303 Birch Street', '123-456-7895', '/images/Cafe_6.jfif'),
+('Cafe G', '404 Cedar Street', '123-456-7896', '/images/Cafe_7.jfif'),
+('Cafe H', '505 Walnut Street', '123-456-7897', '/images/Cafe_8.jfif');
 
 INSERT INTO Employees (CafeId, FullName, Position, Email, Phone)
 VALUES 

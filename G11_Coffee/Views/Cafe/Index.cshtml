@@ -11,8 +11,8 @@
         <a href="#" id="addCafeButton" class="btn btn-primary">Add New Cafe</a>
     </div>
 
-    <div id="cafesTable">
-        @await Html.PartialAsync("_CafeTable", Model)
+    <div id="cafesGrid">
+        @await Html.PartialAsync("_CafeGrid", Model)
     </div>
 
     <div id="message" class="mt-3"></div>
@@ -89,13 +89,15 @@
                 $.ajax({
                     url: form.attr('action'),
                     type: form.attr('method'),
-                    data: form.serialize(),
+                    data: new FormData(form[0]),
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
                         if (response.success) {
                             $('#message').html('<div class="alert alert-success">' + response.message + '</div>');
                             $('#cafeModal').modal('hide');
                             // Tải lại danh sách quán cafe
-                            $('#cafesTable').load('@Url.Action("Index") #cafesTable');
+                            $('#cafesGrid').load('@Url.Action("Index") #cafesGrid');
                         } else {
                             $('#formContainer').html(response);
                         }
@@ -119,7 +121,7 @@
                             $('#message').html('<div class="alert alert-success">' + response.message + '</div>');
                             $('#cafeModal').modal('hide');
                             // Tải lại danh sách quán cafe
-                            $('#cafesTable').load('@Url.Action("Index") #cafesTable');
+                            $('#cafesGrid').load('@Url.Action("Index") #cafesGrid');
                         } else {
                             $('#message').html('<div class="alert alert-danger">' + response.message + '</div>');
                         }

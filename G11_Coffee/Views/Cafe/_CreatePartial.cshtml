@@ -1,6 +1,6 @@
 ﻿@model G11_Coffee.Models.CafeViewModel
 
-<form id="createCafeForm" method="post">
+<form id="createCafeForm" method="post" action="@Url.Action("CreatePartial")" enctype="multipart/form-data">
     <div class="mb-3">
         <label asp-for="Name" class="form-label"></label>
         <input asp-for="Name" class="form-control" />
@@ -15,6 +15,11 @@
         <label asp-for="Phone" class="form-label"></label>
         <input asp-for="Phone" class="form-control" />
         <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ImageFile" class="form-label"></label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
     </div>
     <div class="text-end">
         <button type="submit" class="btn btn-primary">Create</button>
